@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a22487d842414666b12f9ae5a7f89099, type: 3}
+  m_Name: Armor
+  m_EditorClassIdentifier: 
+  item:
+    name: Armor
+    flags: 4
+    components:
+    - rid: 3116649539155787794
+  references:
+    version: 2
+    RefIds:
+    - rid: 3116649539155787794
+      type: {class: Component_Effect, ns: Game.GameEngine.Mechanics, asm: Assets}
+      data:
+        effect:
+          rid: 3116649539155787795
+    - rid: 3116649539155787795
+      type: {class: Effect, ns: Game.GameEngine.Mechanics, asm: Assets}
+      data:
+        parameters:
+        - rid: 3116649539155787796
+    - rid: 3116649539155787796
+      type: {class: IntEffectParameter, ns: Game.GameEngine.Mechanics, asm: Assets}
+      data:
+        name: 2
+        value: 20
