@@ -24,24 +24,24 @@ namespace Equipment
                 _effectsID.Add(Enum.Parse<EffectId>(effectId));
             }
 
-            Subcribe();
+            Subscribe();
         }
 
         ~EquipmentController()
         {
-            Unsubcribe();
+            Unsubscribe();
         }
 
-        private void Subcribe()
+        private void Subscribe()
         {
-            _equipment.OnItemAdded += OnItemAdded;
-            _equipment.OnItemRemoved += OnItemRemoved;
+            _equipment.OnItemEquiped += OnItemAdded;
+            _equipment.OnItemUnequiped += OnItemRemoved;
         }
 
-        private void Unsubcribe()
+        private void Unsubscribe()
         {
-            _equipment.OnItemAdded -= OnItemAdded;
-            _equipment.OnItemRemoved -= OnItemRemoved;
+            _equipment.OnItemEquiped -= OnItemAdded;
+            _equipment.OnItemUnequiped -= OnItemRemoved;
         }
 
         #region EquipmentEventsListiners

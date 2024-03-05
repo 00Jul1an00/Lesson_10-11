@@ -1,95 +1,71 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Sample;
-using Sirenix.OdinInspector.Editor.Validation;
 
 namespace Equipment
 {
     //TODO: Реализовать экипировку
     public sealed class Equipment
     {
-        public event Action<Item> OnItemAdded;
-        public event Action<Item> OnItemRemoved;
-
-        private List<KeyValuePair<EquipmentType, Item>> _equipedItems = new();
+        private Dictionary<EquipmentType, Item> _equipedItems = new();
         private Inventory _inventory;
+
+        public IReadOnlyDictionary<EquipmentType, Item> EquipedItems => _equipedItems;
+
+        public event Action<Item> OnItemEquiped;
+        public event Action<Item> OnItemUnequiped;
 
         public void Setup(Inventory inventory, params KeyValuePair<EquipmentType, Item>[] items)
         {
             _inventory = inventory;
-            _equipedItems = items.ToList();
+
+            foreach(var item in items)
+            {
+                _equipedItems.Add(item.Key, item.Value);
+            }
         }
 
-        public Item GetItem(EquipmentType type)
+        public void Unequip(EquipmentType type, Item item)
         {
-            if (TryGetItem(type, out var result))
+            _equipedItems.TryGetValue(type, out var valueItem);
+
+            if (valueItem != item)
             {
-                return result;
+                throw new Exception($"{type} dont have item {item.Name}");
             }
 
-            return null;
+            if (_inventory == null)
+            {
+                throw new Exception("Inventory in equipment is null");
+            }
+
+            _inventory.AddItem(item);
+            _equipedItems.Remove(type);
+            OnItemUnequiped?.Invoke(item);
         }
 
-        public bool TryGetItem(EquipmentType type, out Item result)
+        public void Equip(EquipmentType type, Item item)
         {
-            result = _equipedItems.FirstOrDefault(p => p.Key == type).Value;
-            return result != default;
-        }
-
-        public void RemoveItem(EquipmentType type, Item item)
-        {
-            if (!TryGetItem(type, out var result))
+            if (_inventory == null)
             {
-                return;
+                throw new Exception("Inventory in equipment is null");
             }
 
-            if (_inventory != null)
+            if (!_inventory.FindItem(item.Name, out var _))
             {
-                _inventory.AddItem(item);
+                throw new Exception($"Inventory doesnt have {item.Name}");
             }
 
-            var pair = _equipedItems.First(p => p.Key == type);
-            _equipedItems.Remove(pair);
-            OnItemRemoved?.Invoke(item);
-        }
+            _equipedItems.TryGetValue(type, out var valueItem);
 
-        public void AddItem(EquipmentType type, Item item)
-        {
-            if (TryGetItem(type, out var result))
+            if (valueItem != null)
             {
-                return;
+                Unequip(type, valueItem);
             }
 
-            if (_inventory != null)
-            {
-                if (!_inventory.FindItem(item.Name, out var _))
-                {
-                    return;
-                }
-
-                _inventory.RemoveItem(item.Name);
-            }
-
-            _equipedItems.Add(new(type, item));
-            OnItemAdded?.Invoke(item);
-        }
-
-        public void ChangeItem(EquipmentType type, Item item)
-        {
-            if (TryGetItem(type, out var result))
-            {
-                RemoveItem(type, result);
-                AddItem(type, item);
-                return;
-            }
-
-            AddItem(type, item);
-        }
-
-        public List<KeyValuePair<EquipmentType, Item>> GetItems()
-        {
-            return _equipedItems;
+            _inventory.RemoveItem(item.Name);
+            _equipedItems.Add(type, item);
+            OnItemEquiped?.Invoke(item);
         }
     }
 }

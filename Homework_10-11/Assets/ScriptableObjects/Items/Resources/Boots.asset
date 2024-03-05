@@ -17,9 +17,14 @@ MonoBehaviour:
     flags: 4
     components:
     - rid: 3116649539155787797
+    - rid: 794290630231326722
   references:
     version: 2
     RefIds:
+    - rid: 794290630231326722
+      type: {class: EquipTypeComponent, ns: Equipment, asm: Equipment}
+      data:
+        _equipmentType: 0
     - rid: 3116649539155787797
       type: {class: Component_Effect, ns: Game.GameEngine.Mechanics, asm: Assets}
       data:
