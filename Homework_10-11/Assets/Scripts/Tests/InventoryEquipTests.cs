@@ -5,14 +5,7 @@ using Equipment;
 using Game.GameEngine.Mechanics;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.TextCore.Text;
 using System;
-using UnityEngine.Assertions;
-
-public enum ItemType
-{
-    helmet,
-}
 
 [TestFixture]
 public class InventoryEquipTests
@@ -65,8 +58,8 @@ public class InventoryEquipTests
 
         var itemInEquipment = _equipment.EquipedItems.FirstOrDefault(p => p.Key == equipmentType).Value;
         _inventory.FindItem(item.Name, out var itemInInventory);
-        NUnit.Framework.Assert.AreEqual(item, itemInEquipment);
-        NUnit.Framework.Assert.AreNotEqual(item, itemInInventory);
+        Assert.AreEqual(item, itemInEquipment);
+        Assert.AreNotEqual(item, itemInInventory);
     }
 
     [TestCase(EquipmentType.HEAD)]
@@ -86,8 +79,8 @@ public class InventoryEquipTests
 
         var itemInEquipment = _equipment.EquipedItems.FirstOrDefault(p => p.Key == equipmentType).Value;
         _inventory.FindItem(item.Name, out var itemInInventory);
-        NUnit.Framework.Assert.AreNotEqual(item, itemInEquipment);
-        NUnit.Framework.Assert.AreEqual(item, itemInInventory);
+        Assert.AreNotEqual(item, itemInEquipment);
+        Assert.AreEqual(item, itemInInventory);
     }
 
     [TestCase(EquipmentType.HEAD, EquipmentType.HEAD)]
@@ -108,7 +101,7 @@ public class InventoryEquipTests
         _equipment.Equip(equipmentTypeItem1, item2);
 
         var itemInEquipment = _equipment.EquipedItems.FirstOrDefault(p => p.Key == equipmentTypeItem1).Value;
-        NUnit.Framework.Assert.AreEqual(item2, itemInEquipment);
+        Assert.AreEqual(item2, itemInEquipment);
     }
 
     [TestCase(EquipmentType.HEAD)]
@@ -138,7 +131,7 @@ public class InventoryEquipTests
         }
 
         var itemInEquipment = _equipment.EquipedItems.FirstOrDefault(p => p.Key == equipmentType).Value;
-        NUnit.Framework.Assert.AreEqual(item, itemInEquipment);
+        Assert.AreEqual(item, itemInEquipment);
 
         foreach (var effectId in _effectsID)
         {
@@ -148,7 +141,7 @@ public class InventoryEquipTests
 
                 if (_character.TryGetStat(effectName, out var currentValue))
                 {
-                    NUnit.Framework.Assert.AreEqual(currentValue, value);
+                    Assert.AreEqual(currentValue, value);
                 }
             }
         }
